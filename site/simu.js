@@ -35,10 +35,10 @@ function setup() {
 	fill(0);
 	triangle(barW+40, 165, barW+40, 175, barW+50, 170);
 
-	idsSJF = {1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 2, 7: 2, 8: 2, 9: 2, 10: 2, 11: 2}
-	idsSRTF = {1: 1, 2: 1, 3: 1, 4: 0, 5: 0, 6: 2, 7: 2, 8: 2, 9: 2, 10: 2, 11: 2}
-	qtdP = 3;//localStorage.getItem("qtdProcessos");
-	somaT = 11;//localStorage.getItem("somaTempo");
+	idsSJF = localStorage.getItem("infoSJF");
+	idsSRTF = localStorage.getItem("infoSRT");
+	qtdP = localStorage.getItem("qtdProcessos");
+	somaT = localStorage.getItem("somaTempo");
 	tamP = barW/somaT;
 	cores = [];
 	for(i = 0; i < qtdP; i++){
