@@ -50,10 +50,9 @@ $(document).ready(function(){
         srtf();
 
         
-        infoSJF = {}, infoSRT = {};
 		localStorage.setItem("qtdProcessos",qtdProcessos);
-		localStorage.setItem("infoSJF",infoSJF);
-        localStorage.setItem("infoSRT",infoSRT);
+		localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
+        localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
         localStorage.setItem("somaTempo",somaTempo);
         window.open("simulacao.html");
         
