@@ -49,11 +49,13 @@ $(document).ready(function(){
         sjf();
         srtf();
 
-        /*
+        
+        infoSJF = {}, infoSRT = {};
 		localStorage.setItem("qtdProcessos",qtdProcessos);
-		localStorage.setItem("processos",processos);
+		localStorage.setItem("infoSJF",infoSJF);
+        localStorage.setItem("infoSRT",infoSRT);
+        localStorage.setItem("somaTempo",somaTempo);
         window.open("simulacao.html");
-        */
         
     }else {
         alert("Complete os campos adequadamente");
