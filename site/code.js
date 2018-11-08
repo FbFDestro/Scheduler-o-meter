@@ -2,7 +2,7 @@ $(document).ready(function(){
     
     var vetorTop, qtdProcessos;
     var processos = [];
-    var infoSJF, infoSRT = {};
+    var infoSJF = {}, infoSRT = {};
     var somaTempo = 0;
 
     function criaObj(id, tempoChegada, tempoExecucao){
@@ -47,7 +47,7 @@ $(document).ready(function(){
         }
         
         sjf();
-        //srtf();
+        srtf();
 
         /*
 		localStorage.setItem("qtdProcessos",qtdProcessos);
@@ -123,7 +123,7 @@ $(document).ready(function(){
                 tempo++;
             }
         }
-        somaTempo =Processos
+        somaTempo = tempo;
         console.log(somaTempo);
         console.log(infoSJF);
 
