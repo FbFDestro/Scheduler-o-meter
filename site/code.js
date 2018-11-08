@@ -43,7 +43,7 @@ $(document).ready(function(){
 		for(var i = 0; i < vetorTop.length; i+=2){
             processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
             var obj = processos[i/2];
-            imprimeObj(obj);
+           //imprimeObj(obj);
         }
         
         sjf();
@@ -91,7 +91,6 @@ $(document).ready(function(){
     
     function sjf(){
         processos.sort(cmpChegada);
-        alert("aaaa");
 
         var tempo = 0;
         var indiceProcessos = 0;
@@ -112,7 +111,7 @@ $(document).ready(function(){
                 var p = escalonador.shift();
                 var id = busca(p.id);
                 processos[id].inicioSJF = tempo;
-                for(var i = tempo; i <= tempo + p.tempoExecucao; i++){
+                for(var i = tempo; i < tempo + p.tempoExecucao; i++){
                     infoSJF[i] = p.id;
                    // console.log(id);
                    // console.log(infoSJF[i]);
@@ -128,7 +127,7 @@ $(document).ready(function(){
         console.log(infoSJF);
 
         for (let i = 0; i < processos.length; i++) {
-            imprimeObj(processos[i]);
+          //  imprimeObj(processos[i]);
         }
 
         for(var i=0;i <= somaTempo; i++){
@@ -136,22 +135,22 @@ $(document).ready(function(){
                 console.log(infoSJF[i]);
         }
 
-        alert("rolinha");
-
     }
 
     function srtf(){
 
         processos.sort(cmpChegada); 
 
+
         var tempo = 0;
         var indiceProcessos = 0;
     
         var escalonador = [];
         var idUltimoEx = -1;
+        alert("comp");
     
-        while(indiceProcessos < n || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
-    
+        while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
+            console.log("wh2");
             var p;
             var tirou = false;
             if(escalonador.length != 0) { // se tem processos para executar
@@ -160,7 +159,7 @@ $(document).ready(function(){
                 tirou = true;
             }
     
-            while(indiceProcessos < n && processos[indiceProcessos].tempoChegada <= tempo) {
+            while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
                 //printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
                 if(!tirou){
                     p = processos[indiceProcessos];
@@ -185,7 +184,7 @@ $(document).ready(function(){
                     escalonador.sort(cmpExec);
                     //printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
                 }
-                infoSRT[p.id] = tempo;
+                infoSRT[tempo] = p.id;
                 tempo++;
                 processos[id].terminoSRT = tempo;		
             }else { // se não tem processos, apenas incrementa no tempo
@@ -193,9 +192,11 @@ $(document).ready(function(){
             }
         }
 
+        console.log(infoSRT);
+
         for(var i=0;i <= somaTempo; i++){
             if(infoSRT[i] !== undefined)
-                console.log(infoSJF[i]);
+                console.log(infoSRT[i]);
         }
 
         alert("rola");
