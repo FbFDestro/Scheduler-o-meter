@@ -2,6 +2,7 @@ $(document).ready(function(){
     
     var vetorTop, qtdProcessos;
     var processos = [];
+    var infoSJF, infoSRT = {};
     var somaTempo = 0;
 
     function criaObj(id, tempoChegada, tempoExecucao){
@@ -32,7 +33,7 @@ $(document).ready(function(){
 		
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 	
-        var tabela = $("textarea[name='tabelaVerdade']").val();
+        var tabela = $("textarea[name='tabelaProcessos']").val();
 
         if(tabela.length != 0){
 
@@ -42,13 +43,11 @@ $(document).ready(function(){
 		for(var i = 0; i < vetorTop.length; i+=2){
             processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
             var obj = processos[i/2];
-            somaTempo += parseInt(vetorTop[i+1]);
             imprimeObj(obj);
         }
-        alert(somaTempo);
         
         sjf();
-        srtf();
+        //srtf();
 
         /*
 		localStorage.setItem("qtdProcessos",qtdProcessos);
@@ -63,7 +62,7 @@ $(document).ready(function(){
 
     });
     
-    function cmpSJF(a, b){
+    function cmpChegada(a, b){
         if(a.tempoChegada == b.tempoChegada){
             if(a.tempoExecucao < b.tempoExecucao) return -1;
             if(a.tempoExecucao > b.tempoExecucao) return 1;
@@ -71,6 +70,16 @@ $(document).ready(function(){
         }
         if (a.tempoChegada < b.tempoChegada) return -1;
         if (a.tempoChegada > b.tempoChegada) return 1;
+    }
+
+    function cmpExec(a, b) {
+        if (a.tempoExecucao == b.tempoExecucao) {
+            if (a.tempoChegada < b.tempoChegada) return -1;
+            if (a.tempoChegada > b.tempoChegada) return 1;
+            if (a.tempoChegada ==b.tempoChegada) return 0;
+        }
+        if (a.tempoExecucao < b.tempoExecucao) return -1;
+        if (a.tempoExecucao > b.tempoExecucao) return 1;
     }
 
     function busca(id){
@@ -81,7 +90,8 @@ $(document).ready(function(){
     }
     
     function sjf(){
-        processos.sort(cmpSJF);
+        processos.sort(cmpChegada);
+        alert("aaaa");
 
         var tempo = 0;
         var indiceProcessos = 0;
@@ -94,6 +104,7 @@ $(document).ready(function(){
             console.log("wh");
             while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
                 escalonador.push(processos[indiceProcessos]);
+                escalonador.sort(cmpExec);
                 indiceProcessos++;
             }
     
@@ -101,21 +112,94 @@ $(document).ready(function(){
                 var p = escalonador.shift();
                 var id = busca(p.id);
                 processos[id].inicioSJF = tempo;
+                for(var i = tempo; i <= tempo + p.tempoExecucao; i++){
+                    infoSJF[i] = p.id;
+                   // console.log(id);
+                   // console.log(infoSJF[i]);
+                }
                 tempo += p.tempoExecucao;
                 processos[id].terminoSJF = tempo;		
             }else { // se não tem processos, apenas incrementa no tempo
                 tempo++;
             }
         }
-
+        somaTempo =Processos
+        console.log(somaTempo);
+        console.log(infoSJF);
 
         for (let i = 0; i < processos.length; i++) {
             imprimeObj(processos[i]);
         }
 
+        for(var i=0;i <= somaTempo; i++){
+            if(infoSJF[i] !== undefined)
+                console.log(infoSJF[i]);
+        }
+
+        alert("rolinha");
+
     }
 
     function srtf(){
+
+        processos.sort(cmpChegada); 
+
+        var tempo = 0;
+        var indiceProcessos = 0;
+    
+        var escalonador = [];
+        var idUltimoEx = -1;
+    
+        while(indiceProcessos < n || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
+    
+            var p;
+            var tirou = false;
+            if(escalonador.length != 0) { // se tem processos para executar
+                p = escalonador.shift();
+                escalonador.sort(cmpExec);
+                tirou = true;
+            }
+    
+            while(indiceProcessos < n && processos[indiceProcessos].tempoChegada <= tempo) {
+                //printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
+                if(!tirou){
+                    p = processos[indiceProcessos];
+                    tirou = true;
+                }else {
+                    escalonador.push(processos[indiceProcessos]);
+                    escalonador.sort(cmpExec);
+                }
+                indiceProcessos++;
+            }
+    
+            if(tirou) { // se tem processos para executar
+                //printf("no tempo %d: tirou e executou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
+                var id = busca(p.id);
+                if(p.id != idUltimoEx){
+                    processos[id].inicioSRT = tempo;
+                }
+                idUltimoEx = p.id;
+                p.tempoExecucao--;
+                if(p.tempoExecucao > 0) {
+                    escalonador.push(p);
+                    escalonador.sort(cmpExec);
+                    //printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
+                }
+                infoSRT[p.id] = tempo;
+                tempo++;
+                processos[id].terminoSRT = tempo;		
+            }else { // se não tem processos, apenas incrementa no tempo
+                tempo++;
+            }
+        }
+
+        for(var i=0;i <= somaTempo; i++){
+            if(infoSRT[i] !== undefined)
+                console.log(infoSJF[i]);
+        }
+
+        alert("rola");
+
 
     }
 
