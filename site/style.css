@@ -76,3 +76,6 @@ hr {
 	margin: 4px 2px;
 	cursor: pointer;
 }
+canvas {
+  display: block;
+}
