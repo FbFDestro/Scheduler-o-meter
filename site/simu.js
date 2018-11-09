@@ -1,4 +1,5 @@
 function setup() {
+
 	var canvas = createCanvas(windowWidth, 300);
 	canvas.parent("simulacao");
 
@@ -6,54 +7,56 @@ function setup() {
 	$("button.proxSeg").click(desenha);
 	$("button.ateFim").click(desenhaTudo);
 
+	background("#eee");
 
 	noLoop();
-	noStroke();
-
-	background("#eee");
 
 	altura = 20;
 
 	rotate(-PI/2);
 	stroke(0);
 	textSize(18);
-	text("SF", -82 - altura,40); 
+	text("SF", -149 - altura,40); 
 	text("SRTF", -242 - altura,40);
 	noStroke();
-
 	rotate(PI/2);
 
-	barW = windowWidth-100;
+	barW = windowWidth - 100;
 
-	rect(50, 40 + altura, barW, 55);
+	fill(255);
+	rect(50, 25, barW, 55);
+	rect(50, 110 + altura, barW, 55);
 	rect(50, 190 + altura, barW, 55);
-	//rect(windowWidth/2-barW/6, 290, barW/3, 55);
 
+	fill(0);
 	textSize(12);
-	text("tempo", 50,18+altura);
+	text("tempo", 50,88+altura);
 	stroke(0); 
-	line(50, 20+altura, barW+50, 20+altura);
-	fill(0);
-	triangle(barW+40, 15+altura, barW+40, 25+altura, barW+50, 20+altura);
-
-	noStroke();
-	text("tempo", 50,168+altura);
-	stroke(0); 
-	line(50, 170+altura, barW+50, 170+altura);
-	fill(0);
-	triangle(barW+40, 165+altura, barW+40, 175+altura, barW+50, 170+altura);
+	line(50, 90+altura, barW+50, 90+altura);
+	triangle(barW+40, 85+altura, barW+40, 95+altura, barW+50, 90+altura);
 
 	idsSJF = JSON.parse(localStorage.getItem("infoSJF"));
 	eventosSJF = JSON.parse(localStorage.getItem("eventosSJF"));
-	console.log(eventosSJF);
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
+	processData = [0,2,0,4,3,1,3,1,3,1];
+	//localStorage.getItem("processData")
 	tamP = barW/somaT;
 	cores = [];
-	for(i = 0; i < qtdP; i++){
+	for(var i = 0; i < qtdP; i++){
 		cores.push(color(random(255),random(255),random(255)));
+		fill(cores[i]);
+		rect(50 + i*(barW/qtdP), 25, barW/qtdP, 55);
 	}
+	noStroke();
+	fill(0);
+	for(var i = 0; i < qtdP*2; i += 2){
+		text("Processo "+i/2, 55 + (i/2)*(barW/qtdP), 40); 
+		text("Chega em "+processData[i], 55 + (i/2)*(barW/qtdP), 55); 
+		text("Tempo de execucao "+processData[i+1]+"s", 55 + (i/2)*(barW/qtdP), 70); 
+	}
+	stroke(0); 
 
 }
 
@@ -65,16 +68,16 @@ function draw() {
 
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
-	//		noStroke();
+			//		noStroke();
 
 			elementoEventosSJF.append("<p>Eventos em " + quantum + "</p>")
 
-			if (idsSJF[quantum] !== undefined) {
+				if (idsSJF[quantum] !== undefined) {
 
-				fill(cores[idsSJF[quantum]]);
-				rect(50 + aux, 40+altura, tamP, 55);
+					fill(cores[idsSJF[quantum]]);
+					rect(50 + aux, 110+altura, tamP, 55);
 
-			}
+				}
 
 			//console.log(eventosSJF[quantum]);
 			if(eventosSJF[quantum] != undefined){
