@@ -1,7 +1,10 @@
 function setup() {
-	createCanvas(windowWidth, 500);
-	noLoop();
+	var canvas = createCanvas(windowWidth, 500);
+	canvas.parent("simulacao");
 
+	elementoEventosSJF = $("#eventosSJF");
+
+	noLoop();
 	noStroke();
 
 	background("#eee");
@@ -38,6 +41,7 @@ function setup() {
 	triangle(barW+40, 165+altura, barW+40, 175+altura, barW+50, 170+altura);
 
 	idsSJF = JSON.parse(localStorage.getItem("infoSJF"));
+	eventosSJF = JSON.parse(localStorage.getItem("eventosSJF"));
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
@@ -52,18 +56,28 @@ function setup() {
 aux = 0;
 quantum = -1
 
+
 function draw() {
 
 	if (quantum != -1) {
 
-		if (aux < barW - (tamP / 2)) {
+		elementoEventosSJF.append("<p>Eventos em "+quantum +"</p>")
 
+		if (aux < barW - (tamP / 2)) {
 	//		noStroke();
+
 			if (idsSJF[quantum] !== undefined) {
 
 				fill(cores[idsSJF[quantum]]);
 				rect(50 + aux, 40+altura, tamP, 55);
 
+			}
+
+			if(eventosSJF[quantum] != undefined){
+				console.log(eventosSJF[quantum].lenght);
+				for(var i=0;i<eventosSJF[quantum].lenght;i++){
+					elementoEventosSJF.append(eventosSJF[quantum][i]);
+				}
 			}
 
 			if (idsSRTF[quantum] !== undefined) {

@@ -2,8 +2,7 @@ $(document).ready(function(){
     
     var vetorTop, qtdProcessos;
     var processos = [];
-    var infoSJF = {}, infoSRT = {};
-    var eventosSJF = {};
+    var infoSJF = {};
     var somaTempo = 0;
 
     function criaObj(id, tempoChegada, tempoExecucao){
@@ -34,7 +33,7 @@ $(document).ready(function(){
 		
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 	
-        var tabela = $("textarea[name='tabelaProcessos']").val();
+        var tabela = $("textarea[name='tabelaVerdade']").val();
 
         if(tabela.length != 0){
 
@@ -44,20 +43,17 @@ $(document).ready(function(){
 		for(var i = 0; i < vetorTop.length; i+=2){
             processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
             var obj = processos[i/2];
-           //imprimeObj(obj);
+            imprimeObj(obj);
         }
         
         sjf();
         srtf();
 
-        
+        /*
 		localStorage.setItem("qtdProcessos",qtdProcessos);
-        localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
-        localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
-        //alert(JSON.stringify(eventosSJF));
-        localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
-        localStorage.setItem("somaTempo",somaTempo);
+		localStorage.setItem("processos",processos);
         window.open("simulacao.html");
+        */
         
     }else {
         alert("Complete os campos adequadamente");
@@ -104,37 +100,23 @@ $(document).ready(function(){
         console.log(qtdProcessos + " " + escalonador.length);
         while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
 
-            eventosSJF[tempo] = [];
-            var eventos = "";
-
             console.log("wh");
             while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
                 escalonador.push(processos[indiceProcessos]);
-                eventos = "O processo de id " + processos[indiceProcessos].id + "foi adicionado ao escalonador"; 
-                eventosSJF[tempo].push(eventos);
                 escalonador.sort(cmpExec);
-                eventos = "O escalonador foi reordenado por ordem de tempo de execução";
-                eventosSJF[tempo].push(eventos);
                 indiceProcessos++;
             }
     
             if(escalonador.length != 0) { // se tem processos para executar
                 var p = escalonador.shift();
                 var id = busca(p.id);
-                eventos = "O processo de id " + p.id + " foi retirado do escalonador";
-                eventosSJF[tempo].push(eventos);
                 processos[id].inicioSJF = tempo;
-                for(var i = tempo; i < tempo + p.tempoExecucao; i++){
+                for(var i = tempo; i <= tempo + p.tempoExecucao; i++){
                     infoSJF[i] = p.id;
-                    eventos = "O processo de id " + p.id + " foi executado uma vez";
-                    eventosSJF[tempo].push(eventos);
                    // console.log(id);
                    // console.log(infoSJF[i]);
                 }
                 tempo += p.tempoExecucao;
-                eventos = "O processo de id " + p.id + " foi finalizado";
-                if(eventosSJF[tempo] === undefined) eventosSJF[tempo] = [];
-                eventosSJF[tempo].push(eventos);
                 processos[id].terminoSJF = tempo;		
             }else { // se não tem processos, apenas incrementa no tempo
                 tempo++;
@@ -145,82 +127,16 @@ $(document).ready(function(){
         console.log(infoSJF);
 
         for (let i = 0; i < processos.length; i++) {
-          //  imprimeObj(processos[i]);
+            imprimeObj(processos[i]);
         }
 
         for(var i=0;i <= somaTempo; i++){
-            if(infoSJF[i] !== undefined)
-                console.log(infoSJF[i]);
+            console.log(infoSJF[i]);
         }
 
     }
 
     function srtf(){
-
-        processos.sort(cmpChegada); 
-
-
-        var tempo = 0;
-        var indiceProcessos = 0;
-    
-        var escalonador = [];
-        var idUltimoEx = -1;
-        alert("comp");
-    
-        while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
-            console.log("wh2");
-            var p;
-            var tirou = false;
-            if(escalonador.length != 0) { // se tem processos para executar
-                p = escalonador.shift();
-                escalonador.sort(cmpExec);
-                tirou = true;
-            }
-    
-            while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
-                //printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
-                if(!tirou){
-                    p = processos[indiceProcessos];
-                    tirou = true;
-                }else {
-                    escalonador.push(processos[indiceProcessos]);
-                    escalonador.sort(cmpExec);
-                }
-                indiceProcessos++;
-            }
-    
-            if(tirou) { // se tem processos para executar
-                //printf("no tempo %d: tirou e executou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
-                var id = busca(p.id);
-                if(p.id != idUltimoEx){
-                    processos[id].inicioSRT = tempo;
-                }
-                idUltimoEx = p.id;
-                p.tempoExecucao--;
-                if(p.tempoExecucao > 0) {
-                    escalonador.push(p);
-                    escalonador.sort(cmpExec);
-                    //printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
-                }
-                infoSRT[tempo] = p.id;
-                tempo++;
-                processos[id].terminoSRT = tempo;		
-            }else { // se não tem processos, apenas incrementa no tempo
-                tempo++;
-            }
-        }
-
-        somaTempo = Math.max(somaTempo, tempo);
-
-        console.log(infoSRT);
-
-        for(var i=0;i <= somaTempo; i++){
-            if(infoSRT[i] !== undefined)
-                console.log(infoSRT[i]);
-        }
-
-        alert("rola");
-
 
     }
 
