@@ -1,8 +1,11 @@
 function setup() {
-	var canvas = createCanvas(windowWidth, 500);
+	var canvas = createCanvas(windowWidth, 300);
 	canvas.parent("simulacao");
 
 	elementoEventosSJF = $("#eventosSJF");
+	$("button.proxSeg").click(desenha);
+	$("button.ateFim").click(desenhaTudo);
+
 
 	noLoop();
 	noStroke();
@@ -42,6 +45,7 @@ function setup() {
 
 	idsSJF = JSON.parse(localStorage.getItem("infoSJF"));
 	eventosSJF = JSON.parse(localStorage.getItem("eventosSJF"));
+	console.log(eventosSJF);
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
@@ -60,11 +64,10 @@ quantum = -1
 function draw() {
 
 	if (quantum != -1) {
-
-		elementoEventosSJF.append("<p>Eventos em "+quantum +"</p>")
-
 		if (aux < barW - (tamP / 2)) {
 	//		noStroke();
+
+			elementoEventosSJF.append("<p>Eventos em " + quantum + "</p>")
 
 			if (idsSJF[quantum] !== undefined) {
 
@@ -73,10 +76,12 @@ function draw() {
 
 			}
 
+			//console.log(eventosSJF[quantum]);
 			if(eventosSJF[quantum] != undefined){
-				console.log(eventosSJF[quantum].lenght);
-				for(var i=0;i<eventosSJF[quantum].lenght;i++){
-					elementoEventosSJF.append(eventosSJF[quantum][i]);
+				console.log(eventosSJF[quantum][0]);
+				for(i in eventosSJF[quantum]){
+					console.log(eventosSJF[quantum][i]);
+					elementoEventosSJF.append("<p>" + eventosSJF[quantum][i] + "</p>");
 				}
 			}
 
@@ -92,7 +97,7 @@ function draw() {
 
 }
 
-function mousePressed(){
+function desenha(){
 	if(quantum == -1){
 		aux = 0;
 		quantum = 0;
@@ -103,17 +108,16 @@ function mousePressed(){
 	redraw();
 }
 
+function desenhaTudo(){
+	while(aux < barW - (tamP / 2)){
+		desenha();
+	}
+}
+
 function keyPressed(){
 	//console.log(keyCode);
 	if(keyCode == 32 || keyCode == 13 || keyCode == 39){
-		if (quantum == -1) {
-			aux = 0;
-			quantum = 0;
-		} else {
-			quantum += 1;
-			aux += tamP;
-		}
-		redraw();
+		desenha();
 	}
 }
 

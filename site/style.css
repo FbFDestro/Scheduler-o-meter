@@ -10,7 +10,7 @@ header {
 	background-color: #eee;
 }
 #cabe {
-	width: 950px;
+	width: 75%;
 	margin: 0 auto;
 }
 #logo {
@@ -23,7 +23,7 @@ header h4 {
 	color: #000;
 }
 article {
-	width: 980px;
+	width: 80%;
 	margin: 0 auto;
 	border: 1px solid #ccc;
 	border-top: 0;
@@ -55,7 +55,7 @@ hr {
 }
 #entrada {
 	margin-top: 10px;
-	width: 700px;
+	width: 70%;
 	text-align: center;
 }
 #entrada p {

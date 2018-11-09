@@ -108,16 +108,20 @@ $(document).ready(function(){
             var eventos = "";
 
             console.log("wh");
+            var reordena = false;
             while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
                 escalonador.push(processos[indiceProcessos]);
-                eventos = "O processo de id " + processos[indiceProcessos].id + "foi adicionado ao escalonador"; 
-                eventosSJF[tempo].push(eventos);
-                escalonador.sort(cmpExec);
-                eventos = "O escalonador foi reordenado por ordem de tempo de execução";
+                reordena = true;
+                eventos = "O processo de id " + processos[indiceProcessos].id + " foi adicionado ao escalonador"; 
                 eventosSJF[tempo].push(eventos);
                 indiceProcessos++;
             }
-    
+            if (reordena) {
+                escalonador.sort(cmpExec);
+                eventos = "O escalonador foi reordenado por ordem de tempo de execução";
+                eventosSJF[tempo].push(eventos);
+            }
+
             if(escalonador.length != 0) { // se tem processos para executar
                 var p = escalonador.shift();
                 var id = busca(p.id);
@@ -127,7 +131,8 @@ $(document).ready(function(){
                 for(var i = tempo; i < tempo + p.tempoExecucao; i++){
                     infoSJF[i] = p.id;
                     eventos = "O processo de id " + p.id + " foi executado uma vez";
-                    eventosSJF[tempo].push(eventos);
+                    if (eventosSJF[i] === undefined) eventosSJF[i] = [];
+                    eventosSJF[i].push(eventos);
                    // console.log(id);
                    // console.log(infoSJF[i]);
                 }
