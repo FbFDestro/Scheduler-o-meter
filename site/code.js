@@ -42,17 +42,25 @@ $(document).ready(function(){
 		vetorTop = tabela.replace( /\n/g," ").split(" ");
 
 		for(var i = 0; i < vetorTop.length; i+=2){
-			processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
-			var obj = processos[i/2];
-			//imprimeObj(obj);
+			if(parseInt(vetorTop[i+1]) == 0){
+				alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
+				alert(qtdProcessos);
+				qtdProcessos--;
+				alert(qtdProcessos);
+			}
+			else{
+				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
+				var obj = processos[i/2];
+				//imprimeObj(obj);
+			}
 		}
 
 		sjf();
 		srtf();
 
 
-		alert(JSON.stringify(infoSJF));
-		alert(JSON.stringify(infoSRT));
+		//alert(JSON.stringify(infoSJF));
+		//alert(JSON.stringify(infoSRT));
 
 		localStorage.setItem("qtdProcessos",qtdProcessos);
 		localStorage.setItem("infoSJF",JSON.stringify(infoSJF));

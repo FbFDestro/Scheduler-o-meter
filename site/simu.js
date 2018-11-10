@@ -40,6 +40,7 @@ function setup() {
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
+	alert(localStorage.getItem("processData"));
 	processData = [0,2,0,4,3,1,3,1,3,1];
 	//localStorage.getItem("processData")
 	tamP = barW/somaT;
@@ -61,43 +62,32 @@ function setup() {
 }
 
 aux = 0;
-quantum = -1
-
+quantum = -1;
 
 function draw() {
-
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
-			//		noStroke();
-
-			elementoEventosSJF.append("<p>Eventos em " + quantum + "</p>")
-
-				if (idsSJF[quantum] !== undefined) {
-
-					fill(cores[idsSJF[quantum]]);
-					rect(50 + aux, 110+altura, tamP, 55);
-
-				}
-
-			//console.log(eventosSJF[quantum]);
+			elementoEventosSJF.append("<p>Eventos no instante " + quantum + "</p>");
 			if(eventosSJF[quantum] != undefined){
-				console.log(eventosSJF[quantum][0]);
+				var none = true;
 				for(i in eventosSJF[quantum]){
-					console.log(eventosSJF[quantum][i]);
 					elementoEventosSJF.append("<p>" + eventosSJF[quantum][i] + "</p>");
+					none = false;
+				}
+				if(none){
+					elementoEventosSJF.append("<p>Nenhum evento</p>");
 				}
 			}
-
+			if (idsSJF[quantum] !== undefined) {
+				fill(cores[idsSJF[quantum]]);
+				rect(50 + aux, 110+altura, tamP, 55);
+			}
 			if (idsSRTF[quantum] !== undefined) {
-
 				fill(cores[idsSRTF[quantum]]);
 				rect(50 + aux, 190+altura, tamP, 55);
-
 			}
 		}
-
 	}
-
 }
 
 function desenha(){
@@ -118,11 +108,7 @@ function desenhaTudo(){
 }
 
 function keyPressed(){
-	//console.log(keyCode);
 	if(keyCode == 32 || keyCode == 13 || keyCode == 39){
 		desenha();
 	}
 }
-
-
-
