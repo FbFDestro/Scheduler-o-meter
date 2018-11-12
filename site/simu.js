@@ -44,22 +44,39 @@ function setup() {
 	alert(processData);
 	tamP = barW/somaT;
 	cores = [];
+
+	fill(255);
+	var tamLeg = 120;
+	rect(50, 25, tamLeg, 55);
+
+
 	for(var i = 0; i < qtdP; i++){
+		var tam = tamLeg + 50 + (i/2)*((barW-tamLeg)/qtdP);
+		var tamFim = (barW-tamLeg)/qtdP;
 		cores.push(color(random(255),random(255),random(255)));
 		fill(cores[i]);
-		rect(50 + i*(barW/qtdP), 25, barW/qtdP, 55);
+		rect(tamLeg + 50 + i*((barW-tamLeg)/qtdP), 25, (barW-tamLeg)/qtdP, 55);
 	}
 	noStroke();
 	fill(0);
-	text("ID Processos", 55, 40); 
-	text("Chega em", 55, 55); 
-	text("Tempo de execucao", 55, 70); 
+
+	text("ID Processos", 55, 39); 
+	text("Chega em", 55, 57); 
+	text("Tempo de execucao", 55, 75); 
+
+	
+	textAlign(CENTER, CENTER);
 	for(var i = 0; i < qtdP*2; i += 2){
-		text(""+i/2, 55 + (i/2)*(barW/qtdP), 40); 
-		text(""+processData[i], 55 + (i/2)*(barW/qtdP), 55); 
-		text(""+processData[i+1]+"s", 55 + (i/2)*(barW/qtdP), 70); 
+		var tam = tamLeg + 50 + (i/2)*((barW-tamLeg)/qtdP);
+		var tamFim = (barW-tamLeg)/qtdP;
+		text(""+i/2, tam, 26, tamFim,18); 
+		text(""+processData[i],tam, 45,tamFim,18); 
+		text(""+processData[i+1],tam,63,tamFim,18); 
 	}
 	stroke(0); 
+
+	line(50, 23+altura, barW+50, 23+altura);
+	line(50, 42+altura, barW+50, 42+altura);
 
 }
 
