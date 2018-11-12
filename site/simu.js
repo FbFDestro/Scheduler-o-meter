@@ -1,3 +1,7 @@
+function ehClaro(cor){
+	return brightness(cor) < 75;
+}
+
 function setup() {
 
 	var canvas = createCanvas(windowWidth, 300);
@@ -50,29 +54,34 @@ function setup() {
 	rect(50, 25, tamLeg, 55);
 
 
+	textAlign(CENTER, CENTER);
 	for(var i = 0; i < qtdP; i++){
-		var tam = tamLeg + 50 + (i/2)*((barW-tamLeg)/qtdP);
+		stroke(0);
+		var tam = tamLeg + 50 + i*((barW-tamLeg)/qtdP);
 		var tamFim = (barW-tamLeg)/qtdP;
 		cores.push(color(random(255),random(255),random(255)));
 		fill(cores[i]);
-		rect(tamLeg + 50 + i*((barW-tamLeg)/qtdP), 25, (barW-tamLeg)/qtdP, 55);
+		rect(tam, 25,tamFim, 55);
+
+		noStroke();
+		if(ehClaro(cores[i])){
+			fill(255);
+		}else {
+			fill(0);
+		}
+		text("" + i, tam+1, 26, tamFim,18); 
+		text(""+processData[i*2],tam+1, 45,tamFim,18); 
+		text(""+processData[(i*2)+1],tam+1,63,tamFim,18); 
 	}
-	noStroke();
+
+
 	fill(0);
 
-	text("ID Processos", 55, 39); 
-	text("Chega em", 55, 57); 
-	text("Tempo de execucao", 55, 75); 
+	textAlign(LEFT);
+	text("ID Processos", 55, 36); 
+	text("Chega em", 55, 55); 
+	text("Tempo de execucao", 55, 73); 
 
-	
-	textAlign(CENTER, CENTER);
-	for(var i = 0; i < qtdP*2; i += 2){
-		var tam = tamLeg + 50 + (i/2)*((barW-tamLeg)/qtdP);
-		var tamFim = (barW-tamLeg)/qtdP;
-		text(""+i/2, tam, 26, tamFim,18); 
-		text(""+processData[i],tam, 45,tamFim,18); 
-		text(""+processData[i+1],tam,63,tamFim,18); 
-	}
 	stroke(0); 
 
 	line(50, 23+altura, barW+50, 23+altura);
@@ -84,6 +93,7 @@ aux = 0;
 quantum = -1;
 
 function draw() {
+	textAlign(CENTER, CENTER);
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
 			elementoEventosSJF.append("<p>Eventos no instante " + quantum + "</p>");
@@ -98,12 +108,35 @@ function draw() {
 				}
 			}
 			if (idsSJF[quantum] !== undefined) {
+				stroke(0);
 				fill(cores[idsSJF[quantum]]);
 				rect(50 + aux, 110+altura, tamP, 55);
+
+				console.log("tam P "+tamP);
+				if (tamP > 18) {
+					noStroke();
+					if (ehClaro(cores[idsSJF[quantum]])) {
+						fill(255);
+					} else {
+						fill(0);
+					}
+					text(String(idsSJF[quantum]), 51 + aux, 110 + altura, tamP, 55);
+				}
 			}
+
 			if (idsSRTF[quantum] !== undefined) {
+				stroke(0)
 				fill(cores[idsSRTF[quantum]]);
 				rect(50 + aux, 190+altura, tamP, 55);
+				if (tamP > 18) {
+					noStroke();
+					if (ehClaro(cores[idsSRTF[quantum]])) {
+						fill(255);
+					} else {
+						fill(0);
+					}
+					text(String(idsSRTF[quantum]), 51 + aux, 190 + altura, tamP, 55);
+				}
 			}
 		}
 	}
