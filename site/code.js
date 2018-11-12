@@ -1,234 +1,249 @@
 $(document).ready(function(){
-    
-    var vetorTop, qtdProcessos;
-    var processos = [];
-    var infoSJF = {}, infoSRT = {};
-    var eventosSJF = {};
-    var somaTempo = 0;
 
-    function criaObj(id, tempoChegada, tempoExecucao){
-        return {
-            "id": id, 
-            "tempoChegada": tempoChegada,
-            "tempoExecucao": tempoExecucao,
-            "inicioSJF": 0,
-            "terminoSJF": 0,
-            "inicioSRT": [],
-            "terminoSRT": []
-        }
-    }
+	var vetorTop, qtdProcessos;
+	var processos = [];
+	var infoSJF = {}, infoSRT = {};
+	var eventosSJF = {};
+	var somaTempo = 0;
 
-    function imprimeObj(obj){
-        var resp = "id " + obj.id + "\n";
-        resp += "tempoChegada " + obj.tempoChegada + "\n";
-        resp += "tempoExecucao " + obj.tempoExecucao + "\n";
-        resp += "inicioSJF " + obj.inicioSJF + "\n";
-        resp += "terminoSJF " + obj.terminoSJF + "\n";
-        resp += "inicioSRT " + obj.inicioSRT + "\n";
-        resp += "terminoSRT " + obj.terminoSRT + "\n";
+	function criaObj(id, tempoChegada, tempoExecucao){
+	return {
+	"id": id, 
+	"tempoChegada": tempoChegada,
+	"tempoExecucao": tempoExecucao,
+	"inicioSJF": 0,
+	"terminoSJF": 0,
+	"inicioSRT": [],
+	"terminoSRT": []
+	}
+	}
 
-        alert(resp);
-    }
+	function imprimeObj(obj){
+		var resp = "id " + obj.id + "\n";
+		resp += "tempoChegada " + obj.tempoChegada + "\n";
+		resp += "tempoExecucao " + obj.tempoExecucao + "\n";
+		resp += "inicioSJF " + obj.inicioSJF + "\n";
+		resp += "terminoSJF " + obj.terminoSJF + "\n";
+		resp += "inicioSRT " + obj.inicioSRT + "\n";
+		resp += "terminoSRT " + obj.terminoSRT + "\n";
+
+		alert(resp);
+	}
 
 	$(".btn").click(function(){
-		
+
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
-	
-        var tabela = $("textarea[name='tabelaProcessos']").val();
 
-        if(tabela.length != 0){
+		var tabela = $("textarea[name='tabelaProcessos']").val();
 
-        tabela = tabela.replace(/\s*\n/g,"/\n");
-        vetorTop = tabela.replace( /\n/g," ").split(" ");
-        
+		if(tabela.length != 0){
+
+		tabela = tabela.replace(/\s*\n/g,"/\n");
+		vetorTop = tabela.replace( /\n/g," ").split(" ");
+
 		for(var i = 0; i < vetorTop.length; i+=2){
-            processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
-            var obj = processos[i/2];
-           //imprimeObj(obj);
-        }
-        
-        sjf();
-        srtf();
+			if(parseInt(vetorTop[i+1]) == 0){
+				alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
+				alert(qtdProcessos);
+				qtdProcessos--;
+				alert(qtdProcessos);
+			}
+			else{
+				vetorTop[i] = parseInt(vetorTop[i]);
+				vetorTop[i+1] = parseInt(vetorTop[i+1]);
+				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
+				var obj = processos[i/2];
+				//imprimeObj(obj);
+			}
+		}
+		alert(vetorTop);
 
-        
+		sjf();
+		srtf();
+
+
+		//alert(JSON.stringify(infoSJF));
+		//alert(JSON.stringify(infoSRT));
+
 		localStorage.setItem("qtdProcessos",qtdProcessos);
-        localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
-        localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
-        //alert(JSON.stringify(eventosSJF));
-        localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
-        localStorage.setItem("somaTempo",somaTempo);
-        window.open("simulacao.html");
-        
-    }else {
-        alert("Complete os campos adequadamente");
-    }        
+		localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
+		localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
+		//alert(JSON.stringify(eventosSJF));
+		localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
+		localStorage.setItem("somaTempo",somaTempo);
+		localStorage.setItem("processData",JSON.stringify(vetorTop));
+		window.open("simulacao.html");
+
+		}else {
+			alert("Complete os campos adequadamente");
+		}        
 
 
-    });
-    
-    function cmpChegada(a, b){
-        if(a.tempoChegada == b.tempoChegada){
-            if(a.tempoExecucao < b.tempoExecucao) return -1;
-            if(a.tempoExecucao > b.tempoExecucao) return 1;
-            if(a.tempoExecucao == b.tempoExecucao) return 0;
-        }
-        if (a.tempoChegada < b.tempoChegada) return -1;
-        if (a.tempoChegada > b.tempoChegada) return 1;
-    }
+	});
 
-    function cmpExec(a, b) {
-        if (a.tempoExecucao == b.tempoExecucao) {
-            if (a.tempoChegada < b.tempoChegada) return -1;
-            if (a.tempoChegada > b.tempoChegada) return 1;
-            if (a.tempoChegada ==b.tempoChegada) return 0;
-        }
-        if (a.tempoExecucao < b.tempoExecucao) return -1;
-        if (a.tempoExecucao > b.tempoExecucao) return 1;
-    }
+	function cmpChegada(a, b){
+		if(a.tempoChegada == b.tempoChegada){
+			if(a.tempoExecucao < b.tempoExecucao) return -1;
+			if(a.tempoExecucao > b.tempoExecucao) return 1;
+			if(a.tempoExecucao == b.tempoExecucao) return 0;
+		}
+		if (a.tempoChegada < b.tempoChegada) return -1;
+		if (a.tempoChegada > b.tempoChegada) return 1;
+	}
 
-    function busca(id){
-        for(var i=0;i<qtdProcessos;i++){
-            if(processos[i].id == id) return i;
-        }
-        return -1; // não encontrou
-    }
-    
-    function sjf(){
-        processos.sort(cmpChegada);
+	function cmpExec(a, b) {
+		if (a.tempoExecucao == b.tempoExecucao) {
+			if (a.tempoChegada < b.tempoChegada) return -1;
+			if (a.tempoChegada > b.tempoChegada) return 1;
+			if (a.tempoChegada ==b.tempoChegada) return 0;
+		}
+		if (a.tempoExecucao < b.tempoExecucao) return -1;
+		if (a.tempoExecucao > b.tempoExecucao) return 1;
+	}
 
-        var tempo = 0;
-        var indiceProcessos = 0;
+	function busca(id){
+		for(var i=0;i<qtdProcessos;i++){
+			if(processos[i].id == id) return i;
+		}
+		return -1; // não encontrou
+	}
 
-        var escalonador = [];
+	function sjf(){
+		processos.sort(cmpChegada);
 
-        console.log(qtdProcessos + " " + escalonador.length);
-        while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
+		var tempo = 0;
+		var indiceProcessos = 0;
 
-            eventosSJF[tempo] = [];
-            var eventos = "";
+		var escalonador = [];
 
-            console.log("wh");
-            var reordena = false;
-            while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
-                escalonador.push(processos[indiceProcessos]);
-                reordena = true;
-                eventos = "O processo de id " + processos[indiceProcessos].id + " foi adicionado ao escalonador"; 
-                eventosSJF[tempo].push(eventos);
-                indiceProcessos++;
-            }
-            if (reordena) {
-                escalonador.sort(cmpExec);
-                eventos = "O escalonador foi reordenado por ordem de tempo de execução";
-                eventosSJF[tempo].push(eventos);
-            }
+		console.log(qtdProcessos + " " + escalonador.length);
+		while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
 
-            if(escalonador.length != 0) { // se tem processos para executar
-                var p = escalonador.shift();
-                var id = busca(p.id);
-                eventos = "O processo de id " + p.id + " foi retirado do escalonador";
-                eventosSJF[tempo].push(eventos);
-                processos[id].inicioSJF = tempo;
-                for(var i = tempo; i < tempo + p.tempoExecucao; i++){
-                    infoSJF[i] = p.id;
-                    eventos = "O processo de id " + p.id + " foi executado uma vez";
-                    if (eventosSJF[i] === undefined) eventosSJF[i] = [];
-                    eventosSJF[i].push(eventos);
-                   // console.log(id);
-                   // console.log(infoSJF[i]);
-                }
-                tempo += p.tempoExecucao;
-                eventos = "O processo de id " + p.id + " foi finalizado";
-                if(eventosSJF[tempo] === undefined) eventosSJF[tempo] = [];
-                eventosSJF[tempo].push(eventos);
-                processos[id].terminoSJF = tempo;		
-            }else { // se não tem processos, apenas incrementa no tempo
-                tempo++;
-            }
-        }
-        somaTempo = tempo;
-        console.log(somaTempo);
-        console.log(infoSJF);
+			eventosSJF[tempo] = [];
+			var eventos = "";
 
-        for (let i = 0; i < processos.length; i++) {
-          //  imprimeObj(processos[i]);
-        }
+			console.log("wh");
+			var reordena = false;
+			while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
+				escalonador.push(processos[indiceProcessos]);
+				reordena = true;
+				eventos = "O processo de id " + processos[indiceProcessos].id + " foi adicionado ao escalonador"; 
+				eventosSJF[tempo].push(eventos);
+				indiceProcessos++;
+			}
+			if (reordena) {
+				escalonador.sort(cmpExec);
+				eventos = "O escalonador foi reordenado por ordem de tempo de execução";
+				eventosSJF[tempo].push(eventos);
+			}
 
-        for(var i=0;i <= somaTempo; i++){
-            if(infoSJF[i] !== undefined)
-                console.log(infoSJF[i]);
-        }
+			if(escalonador.length != 0) { // se tem processos para executar
+				var p = escalonador.shift();
+				var id = busca(p.id);
+				eventos = "O processo de id " + p.id + " foi retirado do escalonador";
+				eventosSJF[tempo].push(eventos);
+				processos[id].inicioSJF = tempo;
+				for(var i = tempo; i < tempo + p.tempoExecucao; i++){
+					infoSJF[i] = p.id;
+					eventos = "O processo de id " + p.id + " foi executado uma vez";
+					if (eventosSJF[i] === undefined) eventosSJF[i] = [];
+					eventosSJF[i].push(eventos);
+					// console.log(id);
+					// console.log(infoSJF[i]);
+				}
+				tempo += p.tempoExecucao;
+				eventos = "O processo de id " + p.id + " foi finalizado";
+				if(eventosSJF[tempo] === undefined) eventosSJF[tempo] = [];
+				eventosSJF[tempo].push(eventos);
+				processos[id].terminoSJF = tempo;		
+			}else { // se não tem processos, apenas incrementa no tempo
+				tempo++;
+			}
+		}
+		somaTempo = tempo;
+		console.log(somaTempo);
+		console.log(infoSJF);
 
-    }
+		for (let i = 0; i < processos.length; i++) {
+			//  imprimeObj(processos[i]);
+		}
 
-    function srtf(){
+		for(var i=0;i <= somaTempo; i++){
+			if(infoSJF[i] !== undefined)
+				console.log(infoSJF[i]);
+		}
 
-        processos.sort(cmpChegada); 
+	}
 
+	function srtf(){
 
-        var tempo = 0;
-        var indiceProcessos = 0;
-    
-        var escalonador = [];
-        var idUltimoEx = -1;
-        alert("comp");
-    
-        while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
-            console.log("wh2");
-            var p;
-            var tirou = false;
-            if(escalonador.length != 0) { // se tem processos para executar
-                p = escalonador.shift();
-                escalonador.sort(cmpExec);
-                tirou = true;
-            }
-    
-            while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
-                //printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
-                if(!tirou){
-                    p = processos[indiceProcessos];
-                    tirou = true;
-                }else {
-                    escalonador.push(processos[indiceProcessos]);
-                    escalonador.sort(cmpExec);
-                }
-                indiceProcessos++;
-            }
-    
-            if(tirou) { // se tem processos para executar
-                //printf("no tempo %d: tirou e executou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
-                var id = busca(p.id);
-                if(p.id != idUltimoEx){
-                    processos[id].inicioSRT = tempo;
-                }
-                idUltimoEx = p.id;
-                p.tempoExecucao--;
-                if(p.tempoExecucao > 0) {
-                    escalonador.push(p);
-                    escalonador.sort(cmpExec);
-                    //printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
-                }
-                infoSRT[tempo] = p.id;
-                tempo++;
-                processos[id].terminoSRT = tempo;		
-            }else { // se não tem processos, apenas incrementa no tempo
-                tempo++;
-            }
-        }
-
-        somaTempo = Math.max(somaTempo, tempo);
-
-        console.log(infoSRT);
-
-        for(var i=0;i <= somaTempo; i++){
-            if(infoSRT[i] !== undefined)
-                console.log(infoSRT[i]);
-        }
-
-        alert("rola");
+		processos.sort(cmpChegada); 
 
 
-    }
+		var tempo = 0;
+		var indiceProcessos = 0;
+
+		var escalonador = [];
+		var idUltimoEx = -1;
+		alert("comp");
+
+		while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
+			console.log("wh2");
+			var p;
+			var tirou = false;
+			if(escalonador.length != 0) { // se tem processos para executar
+				p = escalonador.shift();
+				escalonador.sort(cmpExec);
+				tirou = true;
+			}
+
+			while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
+				//printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
+				if(!tirou){
+					p = processos[indiceProcessos];
+					tirou = true;
+				}else {
+					escalonador.push(processos[indiceProcessos]);
+					escalonador.sort(cmpExec);
+				}
+				indiceProcessos++;
+			}
+
+			if(tirou) { // se tem processos para executar
+				//printf("no tempo %d: tirou e executou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
+				var id = busca(p.id);
+				if(p.id != idUltimoEx){
+					processos[id].inicioSRT = tempo;
+				}
+				idUltimoEx = p.id;
+				p.tempoExecucao--;
+				if(p.tempoExecucao > 0) {
+					escalonador.push(p);
+					escalonador.sort(cmpExec);
+					//printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
+				}
+				infoSRT[tempo] = p.id;
+				tempo++;
+				processos[id].terminoSRT = tempo;		
+			}else { // se não tem processos, apenas incrementa no tempo
+				tempo++;
+			}
+		}
+
+		somaTempo = Math.max(somaTempo, tempo);
+
+		console.log(infoSRT);
+
+		for(var i=0;i <= somaTempo; i++){
+			if(infoSRT[i] !== undefined)
+				console.log(infoSRT[i]);
+		}
+
+		alert("rola");
 
 
-	
+	}
+
+
+
 });
