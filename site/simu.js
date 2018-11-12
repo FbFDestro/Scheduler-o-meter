@@ -1,5 +1,5 @@
 function ehClaro(cor){
-	return brightness(cor) < 75;
+	return lightness(cor) < 45;
 }
 
 function setup() {
@@ -96,7 +96,7 @@ function draw() {
 	textAlign(CENTER, CENTER);
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
-			elementoEventosSJF.append("<p>Eventos no instante " + quantum + "</p>");
+			elementoEventosSJF.append("<p class='tempo'>Eventos no instante " + quantum + "</p>");
 			if(eventosSJF[quantum] != undefined){
 				var none = true;
 				for(i in eventosSJF[quantum]){
@@ -151,12 +151,14 @@ function desenha(){
 		aux += tamP;
 	}
 	redraw();
+	$('#eventos').scrollTop($('#eventos')[0].scrollHeight);
 }
 
 function desenhaTudo(){
 	while(aux < barW - (tamP / 2)){
 		desenha();
 	}
+	$('#eventos').scrollTop($('#eventos')[0].scrollHeight);
 }
 
 function keyPressed(){

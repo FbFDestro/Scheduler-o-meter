@@ -3,7 +3,7 @@ $(document).ready(function(){
 	var vetorTop, qtdProcessos;
 	var processos = [];
 	var infoSJF = {}, infoSRT = {};
-	var eventosSJF = {};
+	var eventosSJF = {}, eventosSRT = {};
 	var somaTempo = 0;
 
 	function criaObj(id, tempoChegada, tempoExecucao){

@@ -33,14 +33,37 @@ button:hover{
 
 }
 
-#eventos{
-	margin: 0 auto;
+table{
+	width: 100%;
+}
+td{
+	width: 50%;
 }
 
+#botoes{
+	margin-bottom: 30px;
+}
+
+#tabelas {
+	padding: 15px;
+	margin: 0 auto;
+	width: 100%;
+	border-radius: 15px;
+    background: #fff;
+    border: 1px solid #ccc;
+}
+#tituloEventos h1{
+	text-align: center;
+}
+#eventos{
+	margin-top:5px;
+    max-height: 440px;
+	min-height: 440px;
+	overflow-y: auto;
+
+}
 
 #eventosSJF{
-	float: left;
 }
 #eventosSRT{
-	float: right;
 }
