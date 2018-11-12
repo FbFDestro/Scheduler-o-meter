@@ -49,11 +49,14 @@ $(document).ready(function(){
 				alert(qtdProcessos);
 			}
 			else{
+				vetorTop[i] = parseInt(vetorTop[i]);
+				vetorTop[i+1] = parseInt(vetorTop[i+1]);
 				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
 				var obj = processos[i/2];
 				//imprimeObj(obj);
 			}
 		}
+		alert(vetorTop);
 
 		sjf();
 		srtf();
@@ -68,7 +71,7 @@ $(document).ready(function(){
 		//alert(JSON.stringify(eventosSJF));
 		localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
 		localStorage.setItem("somaTempo",somaTempo);
-		localStorage.setItem("processData",vatorTop);
+		localStorage.setItem("processData",JSON.stringify(vetorTop));
 		window.open("simulacao.html");
 
 		}else {

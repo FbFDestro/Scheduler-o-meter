@@ -40,9 +40,8 @@ function setup() {
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
-	alert(localStorage.getItem("processData"));
-	processData = [0,2,0,4,3,1,3,1,3,1];
-	//localStorage.getItem("processData")
+	processData = JSON.parse(localStorage.getItem("processData"));
+	alert(processData);
 	tamP = barW/somaT;
 	cores = [];
 	for(var i = 0; i < qtdP; i++){
@@ -52,10 +51,13 @@ function setup() {
 	}
 	noStroke();
 	fill(0);
+	text("ID Processos", 55, 40); 
+	text("Chega em", 55, 55); 
+	text("Tempo de execucao", 55, 70); 
 	for(var i = 0; i < qtdP*2; i += 2){
-		text("Processo "+i/2, 55 + (i/2)*(barW/qtdP), 40); 
-		text("Chega em "+processData[i], 55 + (i/2)*(barW/qtdP), 55); 
-		text("Tempo de execucao "+processData[i+1]+"s", 55 + (i/2)*(barW/qtdP), 70); 
+		text(""+i/2, 55 + (i/2)*(barW/qtdP), 40); 
+		text(""+processData[i], 55 + (i/2)*(barW/qtdP), 55); 
+		text(""+processData[i+1]+"s", 55 + (i/2)*(barW/qtdP), 70); 
 	}
 	stroke(0); 
 
