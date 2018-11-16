@@ -8,6 +8,7 @@ function setup() {
 	canvas.parent("simulacao");
 
 	elementoEventosSJF = $("#eventosSJF");
+	elementoEventosSRT = $("#eventosSRT");
 	$("button.proxSeg").click(desenha);
 	$("button.ateFim").click(desenhaTudo);
 
@@ -42,15 +43,15 @@ function setup() {
 	idsSJF = JSON.parse(localStorage.getItem("infoSJF"));
 	eventosSJF = JSON.parse(localStorage.getItem("eventosSJF"));
 	idsSRTF = JSON.parse(localStorage.getItem("infoSRT"));
+	eventosSRT = JSON.parse(localStorage.getItem("eventosSRT"));
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
 	processData = JSON.parse(localStorage.getItem("processData"));
-	alert(processData);
 	tamP = barW/somaT;
 	cores = [];
 
 	fill(255);
-	var tamLeg = 120;
+	var tamLeg = 130;
 	rect(50, 25, tamLeg, 55);
 
 
@@ -96,15 +97,32 @@ function draw() {
 	textAlign(CENTER, CENTER);
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
-			elementoEventosSJF.append("<p class='tempo'>Eventos no instante " + quantum + "</p>");
+			elementoEventosSJF.append("<p class='tempo'>Eventos no instante " + quantum + ":</p>");
+			elementoEventosSRT.append("<p class='tempo'>Eventos no instante " + quantum + ":</p>");
 			if(eventosSJF[quantum] != undefined){
 				var none = true;
 				for(i in eventosSJF[quantum]){
+					if(eventosSJF[quantum][i] != "<br>") eventosSJF[quantum][i] = "• " + eventosSJF[quantum][i];
 					elementoEventosSJF.append("<p>" + eventosSJF[quantum][i] + "</p>");
 					none = false;
 				}
 				if(none){
-					elementoEventosSJF.append("<p>Nenhum evento</p>");
+					elementoEventosSJF.append("<p>• Nenhum evento</p><br>");
+				}else{
+					elementoEventosSJF.append("<p><br></p>");
+				}
+			}
+			if(eventosSRT[quantum] != undefined){
+				var none = true;
+				for(i in eventosSRT[quantum]){
+					if(eventosSRT[quantum][i] != "<br>") eventosSRT[quantum][i] = "• " + eventosSRT[quantum][i];
+					elementoEventosSRT.append("<p>" + eventosSRT[quantum][i] + "</p>");
+					none = false;
+				}
+				if(none){
+					elementoEventosSRT.append("<p>• Nenhum evento</p><br>");
+				}else{
+					elementoEventosSRT.append("<p><br></p>");
 				}
 			}
 			if (idsSJF[quantum] !== undefined) {

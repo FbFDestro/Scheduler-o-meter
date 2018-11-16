@@ -7,15 +7,15 @@ $(document).ready(function(){
 	var somaTempo = 0;
 
 	function criaObj(id, tempoChegada, tempoExecucao){
-	return {
-	"id": id, 
-	"tempoChegada": tempoChegada,
-	"tempoExecucao": tempoExecucao,
-	"inicioSJF": 0,
-	"terminoSJF": 0,
-	"inicioSRT": [],
-	"terminoSRT": []
-	}
+		return {
+			"id": id, 
+			"tempoChegada": tempoChegada,
+			"tempoExecucao": tempoExecucao,
+			"inicioSJF": 0,
+			"terminoSJF": 0,
+			"inicioSRT": [],
+			"terminoSRT": []
+		}
 	}
 
 	function imprimeObj(obj){
@@ -26,7 +26,6 @@ $(document).ready(function(){
 		resp += "terminoSJF " + obj.terminoSJF + "\n";
 		resp += "inicioSRT " + obj.inicioSRT + "\n";
 		resp += "terminoSRT " + obj.terminoSRT + "\n";
-
 		alert(resp);
 	}
 
@@ -38,46 +37,42 @@ $(document).ready(function(){
 
 		if(tabela.length != 0){
 
-		tabela = tabela.replace(/\s*\n/g,"/\n");
-		vetorTop = tabela.replace( /\n/g," ").split(" ");
+			tabela = tabela.replace(/\s*\n/g,"/\n");
+			vetorTop = tabela.replace( /\n/g," ").split(" ");
 
-		for(var i = 0; i < vetorTop.length; i+=2){
-			if(parseInt(vetorTop[i+1]) == 0){
-				alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
-				alert(qtdProcessos);
-				qtdProcessos--;
-				alert(qtdProcessos);
+			for(var i = 0; i < vetorTop.length; i+=2){
+				if(parseInt(vetorTop[i+1]) == 0){
+					alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
+					qtdProcessos--;
+				}
+				else{
+					vetorTop[i] = parseInt(vetorTop[i]);
+					vetorTop[i+1] = parseInt(vetorTop[i+1]);
+					processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
+				}
 			}
-			else{
-				vetorTop[i] = parseInt(vetorTop[i]);
-				vetorTop[i+1] = parseInt(vetorTop[i+1]);
-				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
-				var obj = processos[i/2];
-				//imprimeObj(obj);
-			}
-		}
-		alert(vetorTop);
 
-		sjf();
-		srtf();
+			sjf();
+			srtf();
+			fit_eventos();
 
+			//alert(JSON.stringify(infoSJF));
+			//alert(JSON.stringify(infoSRT));
 
-		//alert(JSON.stringify(infoSJF));
-		//alert(JSON.stringify(infoSRT));
-
-		localStorage.setItem("qtdProcessos",qtdProcessos);
-		localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
-		localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
-		//alert(JSON.stringify(eventosSJF));
-		localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
-		localStorage.setItem("somaTempo",somaTempo);
-		localStorage.setItem("processData",JSON.stringify(vetorTop));
-		window.open("simulacao.html");
+			localStorage.setItem("qtdProcessos",qtdProcessos);
+			localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
+			localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
+			localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
+			localStorage.setItem("eventosSRT",JSON.stringify(eventosSRT));
+			localStorage.setItem("somaTempo",somaTempo);
+			localStorage.setItem("processData",JSON.stringify(vetorTop));
+			//alert(JSON.stringify(eventosSJF));
+			//alert(JSON.stringify(eventosSRT));
+			window.open("simulacao.html");
 
 		}else {
 			alert("Complete os campos adequadamente");
 		}        
-
 
 	});
 
@@ -108,6 +103,12 @@ $(document).ready(function(){
 		return -1; // não encontrou
 	}
 
+	str_pid = "O processo de ID ";
+	str_add = " foi adicionado ao escalonador";
+	str_exe = " foi executado uma vez";
+	str_remov = " foi retirado do escalonador";
+	str_reord = "O escalonador foi reordenado por tempo de execução restante";
+
 	function sjf(){
 		processos.sort(cmpChegada);
 
@@ -116,95 +117,76 @@ $(document).ready(function(){
 
 		var escalonador = [];
 
-		console.log(qtdProcessos + " " + escalonador.length);
 		while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
 
 			eventosSJF[tempo] = [];
-			var eventos = "";
 
-			console.log("wh");
 			var reordena = false;
 			while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
 				escalonador.push(processos[indiceProcessos]);
 				reordena = true;
-				eventos = "O processo de id " + processos[indiceProcessos].id + " foi adicionado ao escalonador"; 
-				eventosSJF[tempo].push(eventos);
+				eventosSJF[tempo].push(str_pid + processos[indiceProcessos].id + str_add);
 				indiceProcessos++;
 			}
 			if (reordena) {
 				escalonador.sort(cmpExec);
-				eventos = "O escalonador foi reordenado por ordem de tempo de execução";
-				eventosSJF[tempo].push(eventos);
+				eventosSJF[tempo].push("O escalonador foi reordenado por tempo de execução");
 			}
 
 			if(escalonador.length != 0) { // se tem processos para executar
 				var p = escalonador.shift();
 				var id = busca(p.id);
-				eventos = "O processo de id " + p.id + " foi retirado do escalonador";
-				eventosSJF[tempo].push(eventos);
+				eventosSJF[tempo].push(str_pid + p.id + str_remov);
 				processos[id].inicioSJF = tempo;
 				for(var i = tempo; i < tempo + p.tempoExecucao; i++){
 					infoSJF[i] = p.id;
-					eventos = "O processo de id " + p.id + " foi executado uma vez";
 					if (eventosSJF[i] === undefined) eventosSJF[i] = [];
-					eventosSJF[i].push(eventos);
-					// console.log(id);
-					// console.log(infoSJF[i]);
+					eventosSJF[i].push(str_pid + p.id + str_exe);
 				}
 				tempo += p.tempoExecucao;
-				eventos = "O processo de id " + p.id + " foi finalizado";
 				if(eventosSJF[tempo] === undefined) eventosSJF[tempo] = [];
-				eventosSJF[tempo].push(eventos);
+				eventosSJF[tempo].push(str_pid + p.id + " foi finalizado");
 				processos[id].terminoSJF = tempo;		
 			}else { // se não tem processos, apenas incrementa no tempo
 				tempo++;
 			}
 		}
 		somaTempo = tempo;
-		console.log(somaTempo);
-		console.log(infoSJF);
-
-		for (let i = 0; i < processos.length; i++) {
-			//  imprimeObj(processos[i]);
-		}
-
-		for(var i=0;i <= somaTempo; i++){
-			if(infoSJF[i] !== undefined)
-				console.log(infoSJF[i]);
-		}
 
 	}
 
 	function srtf(){
-
 		processos.sort(cmpChegada); 
-
 
 		var tempo = 0;
 		var indiceProcessos = 0;
 
 		var escalonador = [];
 		var idUltimoEx = -1;
-		alert("comp");
 
 		while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
-			console.log("wh2");
+			eventosSRT[tempo] = [];
 			var p;
 			var tirou = false;
 			if(escalonador.length != 0) { // se tem processos para executar
 				p = escalonador.shift();
+				eventosSRT[tempo].push(str_pid + p.id + str_remov);
 				escalonador.sort(cmpExec);
+				eventosSRT[tempo].push(str_reord);
 				tirou = true;
 			}
 
 			while(indiceProcessos < qtdProcessos && processos[indiceProcessos].tempoChegada <= tempo) {
-				//printf("no tempo %d: inseriu o %d com %d na fila\n",tempo, processos[indiceProcessos].id, processos[indiceProcessos].tempoExecucao);
 				if(!tirou){
 					p = processos[indiceProcessos];
+					//eventosSRT[tempo].push("O processo de ID " + p.id + " foi adicionado ao escalonador");
+					eventosSRT[tempo].push(str_pid + p.id + str_remov);
 					tirou = true;
 				}else {
 					escalonador.push(processos[indiceProcessos]);
+					eventosSRT[tempo].push(str_pid + processos[indiceProcessos].id + str_add);
 					escalonador.sort(cmpExec);
+					eventosSRT[tempo].push(str_reord);
 				}
 				indiceProcessos++;
 			}
@@ -217,9 +199,12 @@ $(document).ready(function(){
 				}
 				idUltimoEx = p.id;
 				p.tempoExecucao--;
+				eventosSRT[tempo].push(str_pid + p.id + str_exe);
 				if(p.tempoExecucao > 0) {
 					escalonador.push(p);
+					eventosSRT[tempo].push(str_pid + p.id + str_add);
 					escalonador.sort(cmpExec);
+					eventosSRT[tempo].push(str_reord);
 					//printf("no tempo %d: colocou %d, que tem %d de execucao restante\n",tempo,p.id, p.tempoExecucao);
 				}
 				infoSRT[tempo] = p.id;
@@ -232,18 +217,17 @@ $(document).ready(function(){
 
 		somaTempo = Math.max(somaTempo, tempo);
 
-		console.log(infoSRT);
-
-		for(var i=0;i <= somaTempo; i++){
-			if(infoSRT[i] !== undefined)
-				console.log(infoSRT[i]);
-		}
-
-		alert("rola");
-
-
 	}
 
-
+	function fit_eventos(){
+		for(var i = 0; i < somaTempo; i++){
+			var count = Math.abs(eventosSJF[i].length - eventosSRT[i].length);
+			if(eventosSJF[i].length > eventosSRT[i].length){
+				while(count--) eventosSRT[i].push("<br>");
+			}else{
+				while(count--) eventosSJF[i].push("<br>");
+			}
+		}
+	}
 
 });

@@ -1,85 +1,62 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <script src="p5.min.js"></script>
-  <script src="p5.dom.min.js"></script>
-  <script src="p5.sound.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="simu.css">
-  <script src="jquery.js"></script>
-  <script src="simu.js"></script>
-  <meta charset="utf-8">
+	<head>
+		<meta charset="utf-8">
+		<title>Simulação fera</title>
+		<script src="p5.min.js"></script>
+		<script src="p5.dom.min.js"></script>
+		<script src="p5.sound.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="simu.css">
+		<script src="jquery.js"></script>
+		<script src="simu.js"></script>
+	</head>
 
-</head>
+	<body>
+		<div id="simulacao"></div>
+		<article>
 
-<body>
+			<div id="botoes">
+				<button type="button" name="proxSeg" class="proxSeg">Próximo segundo</button>
+				<button type="button" name="ateFim" class="ateFim">Executar até o fim</button>
+			</div>
 
-  <div id="simulacao"></div>
+			<div id="tabelas">
+				<div id="tituloEventos">
+					<table border="0">
+						<tr>
+							<td valign="top">
+								<h1>Eventos SJF</h1>
+							</td>
+							<td valign="top">
+								<h1>Eventos SRT</h1>
+							</td>
+						</tr>
+					</table>
+				</div>
 
-  <article>
+				<div id="eventos">
+					<table border="0">
+						<tr>
+							<td valign="top">
+								<div id="eventosSJF">
+								</div>
+							</td>
+							<td valign="top">
+								<div id="eventosSRT">
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
 
+		</article>
 
-    <div id="botoes">
-      <button type="button" name="proxSeg" class="proxSeg">Próximo segundo</button>
-      <button type="button" name="ateFim" class="ateFim">Executar até o fim</button>
-    </div>
+		<footer>
+			<p>Simulador desenvolvido</p>
+		</footer>
 
-    <div id="tabelas">
-      <div id="tituloEventos">
-        <table border="0">
-          <tr>
-            <td valign="top">
-              <h1>Eventos SJF</h1>
-            </td>
-            <td valign="top">
-              <h1>Eventos SRT</h1>
-            </td>
+	</body>
 
-          </tr>
-        </table>
-      </div>
-
-      <div id="eventos">
-        <table border="0">
-          <tr>
-            <td valign="top">
-              <div id="eventosSJF">
-              </div>
-            </td>
-            <td valign="top">
-              <div id="eventosSRT">
-              </div>
-            </td>
-
-          </tr>
-        </table>
-      </div>
-
-    </div>
-    <!--
-    <div id="eventos">
-      <div id="eventosSJF">
-        <div class="ce">
-        <h1>Eventos SJF</h1>
-        </div>
-
-      </div>
-      <div id="eventosSRT">
-        <div class="ce">
-          <h1>Eventos SRT</h1>
-        </div>
-
-      </div>
-    </div>
-  -->
-
-  </article>
-
-
-  <footer>
-    <p>Simulador desenvolvido</p>
-
-  </footer>
-
-</body>
 </html>
