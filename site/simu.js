@@ -21,7 +21,7 @@ function setup() {
 	rotate(-PI/2);
 	stroke(0);
 	textSize(18);
-	text("SF", -149 - altura,40); 
+	text("SJF", -151 - altura,40); 
 	text("SRTF", -242 - altura,40);
 	noStroke();
 	rotate(PI/2);
@@ -48,6 +48,7 @@ function setup() {
 	somaT = parseInt(localStorage.getItem("somaTempo"));
 	processData = JSON.parse(localStorage.getItem("processData"));
 	tamP = barW/somaT;
+	ticH = 12;
 	cores = [];
 
 	fill(255);
@@ -58,19 +59,18 @@ function setup() {
 	textAlign(CENTER, CENTER);
 	for(var i = 0; i < qtdP; i++){
 		stroke(0);
-		var tam = tamLeg + 50 + i*((barW-tamLeg)/qtdP);
 		var tamFim = (barW-tamLeg)/qtdP;
+		var tam = tamLeg + 50 + i*tamFim;
 		cores.push(color(random(255),random(255),random(255)));
 		fill(cores[i]);
 		rect(tam, 25,tamFim, 55);
 
 		noStroke();
-		if(ehClaro(cores[i])){
+		if(ehClaro(cores[i]))
 			fill(255);
-		}else {
+		else
 			fill(0);
-		}
-		text("" + i, tam+1, 26, tamFim,18); 
+		text(""+i, tam+1, 26, tamFim,18); 
 		text(""+processData[i*2],tam+1, 45,tamFim,18); 
 		text(""+processData[(i*2)+1],tam+1,63,tamFim,18); 
 	}
@@ -87,6 +87,20 @@ function setup() {
 
 	line(50, 23+altura, barW+50, 23+altura);
 	line(50, 42+altura, barW+50, 42+altura);
+
+	jamonta = false;
+	if(jamonta){
+		for(var i = 0; i < somaT; i++){
+			line(50+(i*tamP), 90+altura-(ticH/2), 50+(i*tamP), 90+altura+(ticH/2));
+		}
+		if(tamP > 18){
+			noStroke();
+			textAlign(CENTER, CENTER);
+			for(var i = 0; i < somaT; i++){
+				text(String(i), 51+(i*tamP), 80+altura, Math.round(tamP), 40);
+			}
+		}
+	}
 
 }
 
@@ -156,6 +170,16 @@ function draw() {
 					text(String(idsSRTF[quantum]), 51 + aux, 190 + altura, tamP, 55);
 				}
 			}
+			if(!jamonta){
+				stroke(0)
+				fill(0);
+				line(50+aux+tamP, 90+altura-(ticH/2), 50+aux+tamP, 90+altura+(ticH/2));
+				if(tamP > 18){
+					noStroke();
+					textAlign(CENTER, CENTER);
+					text(String(quantum), 51+aux, 80+altura, Math.round(tamP), 40);
+				}
+			}
 		}
 	}
 }
@@ -164,6 +188,9 @@ function desenha(){
 	if(quantum == -1){
 		aux = 0;
 		quantum = 0;
+		stroke(0)
+		fill(0);
+		line(50, 90+altura-(ticH/2), 50, 90+altura+(ticH/2));
 	}else {
 		quantum += 1;
 		aux += tamP;
