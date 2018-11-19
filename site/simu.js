@@ -111,8 +111,8 @@ function draw() {
 	textAlign(CENTER, CENTER);
 	if (quantum != -1) {
 		if (aux < barW - (tamP / 2)) {
-			elementoEventosSJF.append("<p class='tempo'>Eventos no instante " + quantum + ":</p>");
-			elementoEventosSRT.append("<p class='tempo'>Eventos no instante " + quantum + ":</p>");
+			elementoEventosSJF.append("<p class='tempo'><b>Eventos no instante " + quantum + ":</b></p>");
+			elementoEventosSRT.append("<p class='tempo'><b>Eventos no instante " + quantum + ":</b></p>");
 			if(eventosSJF[quantum] != undefined){
 				var none = true;
 				for(i in eventosSJF[quantum]){
