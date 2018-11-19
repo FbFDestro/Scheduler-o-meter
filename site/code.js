@@ -30,12 +30,22 @@ $(document).ready(function(){
 		alert(resp);
 	}
 
+	function trataInput(input){
+		alert(input);
+	}
+
+	$(".exemplo").click(function(){
+		alert("rola")
+		var id = parseInt(this.name);
+		alert("but " + id);
+	}
+
 	$(".btn").click(function(){
 
+		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/0.in')
 		fetch('../input/0.in')
-  		.then(response => response.text())
-  		.then(text => console.log(text))
-
+		.then(function(response) { return response.text(); })
+		.then(function(myInput) { trataInput(myInput); });
 
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 
@@ -62,9 +72,6 @@ $(document).ready(function(){
 			srtf();
 			fit_eventos();
 
-			//alert(JSON.stringify(infoSJF));
-			//alert(JSON.stringify(infoSRT));
-
 			localStorage.setItem("qtdProcessos",qtdProcessos);
 			localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
 			localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
@@ -75,9 +82,6 @@ $(document).ready(function(){
 			localStorage.setItem("mediaSJF",mediaSJF);
 			localStorage.setItem("mediaSRT",mediaSRT);
 
-
-			//alert(JSON.stringify(eventosSJF));
-			//alert(JSON.stringify(eventosSRT));
 			window.open("simulacao.html");
 
 		}else {
