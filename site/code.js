@@ -7,8 +7,6 @@ $(document).ready(function(){
 	var somaTempo = 0;
 	var mediaSJF = 0, mediaSRT = 0;
 
-	console.log("AAA");
-
 	function criaObj(id, tempoChegada, tempoExecucao){
 		return {
 			"id": id, 
@@ -178,6 +176,7 @@ $(document).ready(function(){
 		var escalonador = [];
 		var idUltimoEx = -1;
 
+
 		while(indiceProcessos < qtdProcessos || escalonador.length != 0){ // enquanto não coloquei todos os processos no escalonador e ainda não acabei de processar tudo
 			eventosSRT[tempo] = [];
 			var p;
@@ -194,6 +193,8 @@ $(document).ready(function(){
 				if(!tirou){
 					p = processos[indiceProcessos];
 					//eventosSRT[tempo].push("O processo de ID " + p.id + " foi adicionado ao escalonador");
+					eventosSRT[tempo].push(str_pid + p.id + str_add);
+					eventosSRT[tempo].push(str_reord);
 					eventosSRT[tempo].push(str_pid + p.id + str_remov);
 					tirou = true;
 				}else {
