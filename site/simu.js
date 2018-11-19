@@ -147,7 +147,7 @@ function draw() {
 				fill(cores[idsSJF[quantum]]);
 				rect(50 + aux, 110+altura, tamP, 55);
 
-				console.log("tam P "+tamP);
+				//console.log("tam P "+tamP);
 				if (tamP > 18) {
 					noStroke();
 					if (ehClaro(cores[idsSJF[quantum]])) {
