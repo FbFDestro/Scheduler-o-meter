@@ -32,6 +32,11 @@ $(document).ready(function(){
 
 	$(".btn").click(function(){
 
+		fetch('../input/0.in')
+  		.then(response => response.text())
+  		.then(text => console.log(text))
+
+
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 
 		var tabela = $("textarea[name='tabelaProcessos']").val();
