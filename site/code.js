@@ -30,65 +30,65 @@ $(document).ready(function(){
 		alert(resp);
 	}
 
-	function trataInput(input){
-		alert(input);
-	}
-
 	$(".exemplo").click(function(){
-		alert("rola")
-		var id = parseInt(this.name);
-		alert("but " + id);
-	}
+		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
+		fetch('../input/'+this.name+'.in')
+		.then(function(response) { return response.text(); })
+		.then(function(myInput) {
+			myInput = myInput.replace(/\s*\n/g,"/\n").replace( /\n/g," ").split(" ");
+			vetorTop = myInput.slice(1);
+			qtdProcessos = parseInt(myInput[0]);
+			alert(qtdProcessos)
+			alert(vetorTop)
+			escalona();
+			});
+	});
+
 
 	$(".btn").click(function(){
-
-		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/0.in')
-		fetch('../input/0.in')
-		.then(function(response) { return response.text(); })
-		.then(function(myInput) { trataInput(myInput); });
-
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
-
 		var tabela = $("textarea[name='tabelaProcessos']").val();
-
 		if(tabela.length != 0){
-
 			tabela = tabela.replace(/\s*\n/g,"/\n");
 			vetorTop = tabela.replace( /\n/g," ").split(" ");
-
-			for(var i = 0; i < vetorTop.length; i+=2){
-				if(parseInt(vetorTop[i+1]) == 0){
-					alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
-					qtdProcessos--;
-				}
-				else{
-					vetorTop[i] = parseInt(vetorTop[i]);
-					vetorTop[i+1] = parseInt(vetorTop[i+1]);
-					processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
-				}
-			}
-
-			sjf();
-			srtf();
-			fit_eventos();
-
-			localStorage.setItem("qtdProcessos",qtdProcessos);
-			localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
-			localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
-			localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
-			localStorage.setItem("eventosSRT",JSON.stringify(eventosSRT));
-			localStorage.setItem("somaTempo",somaTempo);
-			localStorage.setItem("processData",JSON.stringify(vetorTop));
-			localStorage.setItem("mediaSJF",mediaSJF);
-			localStorage.setItem("mediaSRT",mediaSRT);
-
-			window.open("simulacao.html");
-
-		}else {
+			alert(qtdProcessos)
+			alert(vetorTop)
+			escalona();
+		}else{
 			alert("Complete os campos adequadamente");
-		}        
-
+		}
 	});
+	
+	function escalona(){
+		for(var i = 0; i < vetorTop.length; i+=2){
+			if(parseInt(vetorTop[i+1]) == 0){
+				alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
+				qtdProcessos--;
+			}
+			else{
+				vetorTop[i] = parseInt(vetorTop[i]);
+				vetorTop[i+1] = parseInt(vetorTop[i+1]);
+				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
+			}
+		}
+		sjf();
+		srtf();
+		fit_eventos();
+
+		localStorage.setItem("qtdProcessos",qtdProcessos);
+		localStorage.setItem("infoSJF",JSON.stringify(infoSJF));
+		localStorage.setItem("eventosSJF",JSON.stringify(eventosSJF));
+		localStorage.setItem("infoSRT",JSON.stringify(infoSRT));
+		localStorage.setItem("eventosSRT",JSON.stringify(eventosSRT));
+		localStorage.setItem("somaTempo",somaTempo);
+		localStorage.setItem("processData",JSON.stringify(vetorTop));
+		localStorage.setItem("mediaSJF",mediaSJF);
+		localStorage.setItem("mediaSRT",mediaSRT);
+
+		window.open("simulacao.html");
+	}
+
+
 
 	function cmpChegada(a, b){
 		if(a.tempoChegada == b.tempoChegada){
