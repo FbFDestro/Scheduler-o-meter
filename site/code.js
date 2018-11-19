@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	var vetorTop, qtdProcessos;
+	var vetorTop = [], qtdProcessos;
 	var processos = [];
 	var infoSJF = {}, infoSRT = {};
 	var eventosSJF = {}, eventosSRT = {};
@@ -29,30 +29,30 @@ $(document).ready(function(){
 		resp += "terminoSRT " + obj.terminoSRT + "\n";
 		alert(resp);
 	}
+	
+	function trataInput(myInput){
+		myInput = myInput.replace(/\s*\n/g,"\n");
+		myInput = myInput.replace( /\n/g," ").split(" ");
+
+		qtdProcessos = parseInt(myInput[0]);
+		vetorTop = myInput.slice(1, myInput[0]*2+1);
+		//console.log(JSON.stringify(vetorTop));
+		escalona();
+	}
 
 	$(".exemplo").click(function(){
-		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
-		fetch('../input/'+this.name+'.in')
+		fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
+		//fetch('../input/'+this.name+'.in')
 		.then(function(response) { return response.text(); })
-		.then(function(myInput) {
-			myInput = myInput.replace(/\s*\n/g,"/\n").replace( /\n/g," ").split(" ");
-			vetorTop = myInput.slice(1);
-			qtdProcessos = parseInt(myInput[0]);
-			alert(qtdProcessos)
-			alert(vetorTop)
-			escalona();
-			});
+		.then(function(myInput) { trataInput(myInput); });
 	});
-
 
 	$(".btn").click(function(){
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 		var tabela = $("textarea[name='tabelaProcessos']").val();
 		if(tabela.length != 0){
-			tabela = tabela.replace(/\s*\n/g,"/\n");
+			tabela = tabela.replace(/\s*\n/g,"\n");
 			vetorTop = tabela.replace( /\n/g," ").split(" ");
-			alert(qtdProcessos)
-			alert(vetorTop)
 			escalona();
 		}else{
 			alert("Complete os campos adequadamente");
@@ -60,6 +60,8 @@ $(document).ready(function(){
 	});
 	
 	function escalona(){
+		alert(qtdProcessos);
+		alert(vetorTop);
 		for(var i = 0; i < vetorTop.length; i+=2){
 			if(parseInt(vetorTop[i+1]) == 0){
 				alert("Um processo nao pode ter tempo de execução 0\nEle será removido do simulador");
@@ -71,6 +73,7 @@ $(document).ready(function(){
 				processos.push(criaObj(parseInt(i/2), parseInt(vetorTop[i]),parseInt(vetorTop[i+1])));
 			}
 		}
+		alert(vetorTop);
 		sjf();
 		srtf();
 		fit_eventos();
