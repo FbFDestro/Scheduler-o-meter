@@ -245,7 +245,7 @@ $(document).ready(function(){
 
 		var somaAux = 0;
 			for(var i =0; i< processos.length;i++){
-			somaAux+= processos[i].inicioSRT[p.inicioSRT.length-1];
+			somaAux+= processos[i].inicioSRT[processos[i].inicioSRT.length-1];
 		}
 		mediaSRT = somaAux/qtdProcessos;
 
