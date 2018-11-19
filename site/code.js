@@ -29,19 +29,20 @@ $(document).ready(function(){
 		resp += "terminoSRT " + obj.terminoSRT + "\n";
 		alert(resp);
 	}
+	
+	function trataInput(myInput){
+		myInput = myInput.replace(/\s*\n/g,"\n");
+		myInput = myInput.replace( /\n/g," ").split(" ");
+		qtdProcessos = parseInt(myInput[0]);
+		vetorTop = myInput.slice(1, myInput[0]*2+1);
+		escalona();
+	}
 
 	$(".exemplo").click(function(){
-		fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
-		//fetch('../input/'+this.name+'.in')
+		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
+		fetch('../input/'+this.name+'.in')
 		.then(function(response) { return response.text(); })
-		.then(function(myInput) {
-			myInput = myInput.replace(/\s*\n/g,"/\n").replace( /\n/g," ").split(" ");
-			vetorTop = myInput.slice(1);
-			qtdProcessos = parseInt(myInput[0]);
-			//alert(qtdProcessos)
-			//alert(vetorTop)
-			escalona();
-			});
+		.then(function(myInput) { trataInput(myInput); });
 	});
 
 
@@ -49,10 +50,8 @@ $(document).ready(function(){
 		qtdProcessos = parseInt($("input[name='qtdProcessos']").val());
 		var tabela = $("textarea[name='tabelaProcessos']").val();
 		if(tabela.length != 0){
-			tabela = tabela.replace(/\s*\n/g,"/\n");
+			tabela = tabela.replace(/\s*\n/g,"\n");
 			vetorTop = tabela.replace( /\n/g," ").split(" ");
-			//alert(qtdProcessos)
-			//alert(vetorTop)
 			escalona();
 		}else{
 			alert("Complete os campos adequadamente");
