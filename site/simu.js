@@ -185,8 +185,8 @@ function draw() {
 			}
 		}else if(fim) {
 			fim = false;
-			elementoEventosSRT.append("<p><b>A média de espera foi: " + mediaSRT + "</b></p>");
-			elementoEventosSJF.append("<p><b>A média de espera foi: " + mediaSJF + "</b></p>");
+			elementoEventosSRT.append("<p><b>A média de espera foi: " + mediaSRT.toFixed(3) + "</b></p>");
+			elementoEventosSJF.append("<p><b>A média de espera foi: " + mediaSJF.toFixed(3) + "</b></p>");
 
 		}
 	}
