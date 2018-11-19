@@ -16,6 +16,12 @@ article{
 	margin: 0 auto;
 }
 
+#botoes{
+	width: 318px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
 button{
 	background-color: #FFF; /* Green */
     border: 1px solid #ccc;
@@ -41,9 +47,6 @@ td{
 	width: 50%;
 }
 
-#botoes{
-	margin-bottom: 30px;
-}
 
 #tabelas {
 	padding: 15px;
@@ -64,7 +67,25 @@ td{
 
 }
 
-#eventosSJF{
+footer {
+    margin-top: 30px;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    padding: 20px;
 }
-#eventosSRT{
+
+footer p{
+	text-align: center;
+}
+
+footer p a{
+	text-decoration: none;
+	color: #5ba4ba;
+	transition: 0.7s;
+}
+
+footer p a:hover{
+	color: #515151;
+	transition: 0.7s;
 }

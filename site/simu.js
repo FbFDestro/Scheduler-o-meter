@@ -4,7 +4,7 @@ function ehClaro(cor){
 
 function setup() {
 
-	var canvas = createCanvas(windowWidth, 300);
+	var canvas = createCanvas(windowWidth, 290);
 	canvas.parent("simulacao");
 
 	elementoEventosSJF = $("#eventosSJF");
@@ -47,6 +47,8 @@ function setup() {
 	qtdP = parseInt(localStorage.getItem("qtdProcessos"));
 	somaT = parseInt(localStorage.getItem("somaTempo"));
 	processData = JSON.parse(localStorage.getItem("processData"));
+	mediaSRT = parseFloat(localStorage.getItem("mediaSRT"));
+	mediaSJF = parseFloat(localStorage.getItem("mediaSJF"));
 	tamP = barW/somaT;
 	ticH = 12;
 	cores = [];
@@ -106,6 +108,7 @@ function setup() {
 
 aux = 0;
 quantum = -1;
+fim = true;
 
 function draw() {
 	textAlign(CENTER, CENTER);
@@ -180,6 +183,11 @@ function draw() {
 					text(String(quantum), 51+aux, 80+altura, Math.round(tamP), 40);
 				}
 			}
+		}else if(fim) {
+			fim = false;
+			elementoEventosSRT.append("<p><b>A média de espera foi: " + mediaSRT + "</b></p>");
+			elementoEventosSJF.append("<p><b>A média de espera foi: " + mediaSJF + "</b></p>");
+
 		}
 	}
 }

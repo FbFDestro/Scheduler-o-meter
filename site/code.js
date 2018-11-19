@@ -5,6 +5,9 @@ $(document).ready(function(){
 	var infoSJF = {}, infoSRT = {};
 	var eventosSJF = {}, eventosSRT = {};
 	var somaTempo = 0;
+	var mediaSJF = 0, mediaSRT = 0;
+
+	console.log("AAA");
 
 	function criaObj(id, tempoChegada, tempoExecucao){
 		return {
@@ -66,6 +69,10 @@ $(document).ready(function(){
 			localStorage.setItem("eventosSRT",JSON.stringify(eventosSRT));
 			localStorage.setItem("somaTempo",somaTempo);
 			localStorage.setItem("processData",JSON.stringify(vetorTop));
+			localStorage.setItem("mediaSJF",mediaSJF);
+			localStorage.setItem("mediaSRT",mediaSRT);
+
+
 			//alert(JSON.stringify(eventosSJF));
 			//alert(JSON.stringify(eventosSRT));
 			window.open("simulacao.html");
@@ -153,6 +160,13 @@ $(document).ready(function(){
 		}
 		somaTempo = tempo;
 
+		var somaAux = 0;
+		for(var p of processos){
+			somaAux += p.inicioSJF;
+		}
+
+		mediaSJF = somaAux/processos.length;
+
 	}
 
 	function srtf(){
@@ -214,8 +228,14 @@ $(document).ready(function(){
 				tempo++;
 			}
 		}
-
 		somaTempo = Math.max(somaTempo, tempo);
+
+		var somaAux = 0;
+		for(var p of processos){
+			somaAux += p.inicioSRT;
+		}
+
+		mediaSRT = somaAux/processos.length;
 
 	}
 
