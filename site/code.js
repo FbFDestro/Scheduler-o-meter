@@ -39,8 +39,8 @@ $(document).ready(function(){
 	}
 
 	$(".exemplo").click(function(){
-		//fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
-		fetch('../input/'+this.name+'.in')
+		fetch('https://vitorgt.github.io/Scheduler-o-meter/input/'+this.name+'.in')
+		//fetch('../input/'+this.name+'.in')
 		.then(function(response) { return response.text(); })
 		.then(function(myInput) { trataInput(myInput); });
 	});
@@ -175,8 +175,8 @@ $(document).ready(function(){
 		somaTempo = tempo;
 
 		var somaAux = 0;
-		for(var p of processos){
-			somaAux += p.inicioSJF; 
+		for(var i =0; i< processos.length;i++){
+			somaAux+= processos[i].inicioSJF;
 		}
 
 		mediaSJF = somaAux/qtdProcessos;
@@ -244,10 +244,9 @@ $(document).ready(function(){
 		somaTempo = Math.max(somaTempo, tempo);
 
 		var somaAux = 0;
-		for(var p of processos){
-			somaAux += p.inicioSRT[p.inicioSRT.length-1];
+			for(var i =0; i< processos.length;i++){
+			somaAux+= processos[i].inicioSRT[p.inicioSRT.length-1];
 		}
-
 		mediaSRT = somaAux/qtdProcessos;
 
 	}

@@ -31,6 +31,15 @@ article {
 	padding: 5px;
 	padding-top: 20px;
 }
+#aviso{
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #515151;
+	padding: 15px;
+	width: 80%;
+	margin:0 auto;
+	text-align: center;
+}
 #conteudo {
 	text-align: center;
 }
