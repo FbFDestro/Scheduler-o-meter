@@ -85,6 +85,7 @@ $(document).ready(function(){
 		localStorage.setItem("mediaSRT",mediaSRT);
 
 		window.open("simulacao.html");
+		location.reload();
 	}
 
 
